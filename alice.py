@@ -1,6 +1,7 @@
 from common import hash_to_Zp
 from sympy import mod_inverse
 from ecpy.curves import Curve,Point
+import random
 
 class Alice:
     def __init__(self, curve_order, a, b, c):
@@ -9,9 +10,6 @@ class Alice:
         self.k_inv = a
         self.b = b
         self.c_share = c
-
-    def compute_key_share_prime(self, key_share):
-        self.key_share_prime = (key_share * self.k_inv) % self.curve_order
 
     def output1(self):
         return self.k, self.k_inv
@@ -36,6 +34,21 @@ class Alice:
         point = secret * G  
         self.pub_key_share = point
         return point
+    
+    def set_secret_key_share(self, sk):
+        self.key_share = sk
+
+    def compute_d_and_e(self, u, v):
+        d_A = (self.key_share + u) % self.curve_order
+        e_A = (self.k_inv + v) % self.curve_order
+        return d_A, e_A
+    
+    def open_d_and_e_share(self, d_A, e_A, d_B, e_B):
+        self.e = (e_A + e_B) % self.curve_order
+        self.d = (d_A + d_B) % self.curve_order
+    
+    def compute_key_share_prime(self, w):
+        self.key_share_prime = (w + self.e*self.key_share + self.d*self.k_inv + self.e*self.d) % self.curve_order
 
     def open_point_share_pub_key(self, pub_key_share):
         return self.pub_key_share + pub_key_share

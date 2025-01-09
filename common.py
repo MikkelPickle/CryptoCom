@@ -1,16 +1,15 @@
 from hashlib import sha256
 from sympy import mod_inverse
 
-class Triple:
-    def __init__(self, u, v, w):
-        self.u = u
-        self.v = v
-        self.w = w
+import hashlib
 
 def hash_to_Zp(message):
     curve_order = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141
-    message_hash = sha256(message.encode()).digest()
-    hash_int = int.from_bytes(message_hash, byteorder='big') % curve_order
+    num_bits = curve_order.bit_length()
+    message_hash = hashlib.sha512(message.encode()).digest()
+    hash_int = int.from_bytes(message_hash, byteorder='big')
+    if hash_int.bit_length() > num_bits:
+        hash_int = hash_int >> (hash_int.bit_length() - num_bits) #truncate to the L_n leftmost bits
     return hash_int
 
 def verify_signature(curve, sig, rx, P, message):

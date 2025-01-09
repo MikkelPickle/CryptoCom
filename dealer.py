@@ -1,5 +1,4 @@
 import random
-from common import Triple
 from ecpy.curves import Curve,Point
 from sympy import mod_inverse
 from math import gcd
@@ -16,15 +15,6 @@ class Dealer:
         secret = random.randint(0, self.p - 1)
         self.secret = secret
         return secret
-    
-    def user_independent_preprocessing(self):
-        a_shares, b_shares, c_shares = self.randmul()
-        c = self.open_shares(c_shares)
-        c_inv = mod_inverse(c, self.p)
-        assert gcd(c, self.p) == 1, f"c and p are not coprime: gcd(c, p) = {gcd(c, self.p)}"
-        assert c != 0, "c must not be zero"
-        self.k_inverse = a_shares
-        self.k = self.convert_secrets_to_curve_representation(b_shares, c_inv)
 
     def randmul(self):
         a = random.randint(1, self.p - 1)
@@ -42,14 +32,5 @@ class Dealer:
         share_bob = (value - share_alice) % self.p
         assert (share_alice + share_bob) % self.p == value, f"Share mismatch: {(share_alice + share_bob) % self.p} != {value}"
         return share_alice, share_bob
-        
-    def convert_secrets_to_curve_representation(self, b, c):
-        c_inv = mod_inverse(c, self.p)
-        k_shares = [self.convert_secret_to_point(share) * c_inv for share in b]
-        self.k = k_shares
-        return k_shares
-
-    def output(self):
-        return self.k, self.k_inverse
 
         
