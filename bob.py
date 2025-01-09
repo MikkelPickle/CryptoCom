@@ -1,7 +1,6 @@
 from common import hash_to_Zp
 from sympy import mod_inverse
-from ecpy.curves import Curve,Point
-import random
+from ecpy.curves import Curve
 
 class Bob:
     def __init__(self, curve_order, a, b, c):
@@ -40,7 +39,7 @@ class Bob:
     
     def set_secret_key_share(self, sk):
         self.key_share = sk
-
+ 
     def compute_d_and_e(self, u, v):
         d_B = (self.key_share + u) % self.curve_order
         e_B = (self.k_inv + v) % self.curve_order

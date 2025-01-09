@@ -1,7 +1,4 @@
 import random
-from ecpy.curves import Curve,Point
-from sympy import mod_inverse
-from math import gcd
 
 class Dealer:
     def __init__(self, curve):

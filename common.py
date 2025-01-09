@@ -1,6 +1,4 @@
-from hashlib import sha256
 from sympy import mod_inverse
-
 import hashlib
 
 def hash_to_Zp(message):

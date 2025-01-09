@@ -1,11 +1,11 @@
 from dealer import Dealer
-from ecpy.curves import Curve,Point
+from ecpy.curves import Curve
 from bob import Bob
 from alice import Alice
 from common import verify_signature
 
 def main():
-    message = "hej"
+    message = "Claudio is the best"
     curve = Curve.get_curve('secp256k1')
     dealer = Dealer(curve)
     secret = dealer.generate_key()

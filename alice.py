@@ -1,7 +1,6 @@
 from common import hash_to_Zp
 from sympy import mod_inverse
-from ecpy.curves import Curve,Point
-import random
+from ecpy.curves import Curve
 
 class Alice:
     def __init__(self, curve_order, a, b, c):
